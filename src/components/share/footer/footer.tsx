@@ -194,7 +194,7 @@ export default function Footer() {
               aria-label="MOFHAF home"
               className="group inline-flex items-center gap-3"
             >
-              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-400 text-base font-black tracking-tight text-black transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-400 text-base font-black tracking-tight text-white transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-105">
                 MH
               </span>
 
