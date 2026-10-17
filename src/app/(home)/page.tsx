@@ -1,9 +1,11 @@
+import HeroBanner from "@/components/home/topBanner/top-banner";
 
 
 export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <h1>HI MOfassel</h1>
+   
+      <HeroBanner/>
     </div>
   );
 }
