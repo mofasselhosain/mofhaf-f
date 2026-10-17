@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">MOFHAF MH Monogram</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0a5"/><stop offset=".3" stop-color="#ffd65e"/><stop offset=".65" stop-color="#c88717"/><stop offset="1" stop-color="#9d5b08"/></linearGradient>
+    <linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#d8d9dc"/><stop offset="1" stop-color="#9da2aa"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="64" fill="#050505"/>
+  <path d="M290 110 L345 68 L345 345 L290 387 Z M390 66 L445 24 L445 340 L390 382 Z" fill="url(#s)"/>
+  <path d="M68 75 L205 182 L308 103 L308 225 L258 263 L178 198 L178 354 L123 397 L68 362 Z" fill="url(#g)"/>
+  <path d="M185 265 C244 255 285 214 335 180 C382 148 420 140 445 158 C415 145 385 169 352 190 C294 227 250 278 207 283 C191 285 177 279 165 273 Z" fill="url(#g)"/>
+</svg>
