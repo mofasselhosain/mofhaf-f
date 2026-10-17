@@ -27,6 +27,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { SecondHeader } from "./secondHeader";
 
 const categories = [
   { name: "Electronics", slug: "electronics" },
@@ -402,7 +403,7 @@ export default function MofhafHeader() {
       </div>
 
       {/* Desktop category shortcuts */}
-      <div className="hidden border-t lg:block">
+      {/* <div className="hidden border-t lg:block">
         <nav className="mx-auto flex max-w-screen-2xl items-center gap-6 overflow-x-auto px-8 py-2">
           {categories.map((category) => (
             <Link
@@ -421,7 +422,8 @@ export default function MofhafHeader() {
             Deals
           </Link>
         </nav>
-      </div>
+      </div> */}
+      <SecondHeader/>
     </header>
   );
 }
