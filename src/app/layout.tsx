@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import MofhafHeader from "@/components/share/top-header/top-header";
 import Footer from "@/components/share/footer/footer";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "MOFHAF",
@@ -21,6 +22,7 @@ export default function RootLayout({
         <MofhafHeader/>
      
         <main>{children}</main>
+        <Toaster position="top-right" richColors closeButton />
         <Footer/>
       
       </body>

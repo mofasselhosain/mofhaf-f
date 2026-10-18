@@ -2,9 +2,10 @@
 "use client";
 
 import { useState } from "react";
-
-import type { Product } from "@/types/product";
 import { ProductCard } from "./producst-card";
+import { ProductDetailsDialog } from "./product-details-dialog";
+import type { Product } from "@/types/product";
+import { Layers2, ArrowRight, Star } from "lucide-react";
 
 const products: Product[] = [
   {
@@ -17,6 +18,15 @@ const products: Product[] = [
     rating: 4.8,
     sold: 120,
     category: "Electronics",
+    stock: 25,
+    description:
+      "Enjoy your favorite music with stylish wireless headphones designed for everyday listening and entertainment.",
+    features: [
+      "Comfortable over-ear design",
+      "Wireless listening convenience",
+      "Lightweight and portable",
+      "Suitable for everyday use",
+    ],
   },
   {
     id: "2",
@@ -28,6 +38,14 @@ const products: Product[] = [
     rating: 4.7,
     sold: 86,
     category: "Fashion",
+    stock: 18,
+    description:
+      "A minimal everyday watch with a clean design that complements casual and formal outfits.",
+    features: [
+      "Minimal contemporary style",
+      "Versatile everyday accessory",
+      "Easy-to-style design",
+    ],
   },
   {
     id: "3",
@@ -39,6 +57,14 @@ const products: Product[] = [
     rating: 4.6,
     sold: 204,
     category: "Footwear",
+    stock: 30,
+    description:
+      "Sporty sneakers designed for an active lifestyle and everyday casual wear.",
+    features: [
+      "Sport-inspired design",
+      "Casual everyday styling",
+      "Versatile footwear option",
+    ],
   },
   {
     id: "4",
@@ -50,6 +76,14 @@ const products: Product[] = [
     rating: 4.5,
     sold: 98,
     category: "Accessories",
+    stock: 12,
+    description:
+      "A versatile backpack for everyday carrying, commuting, and organizing essentials.",
+    features: [
+      "Everyday carry design",
+      "Practical storage space",
+      "Versatile casual styling",
+    ],
   },
   {
     id: "5",
@@ -61,6 +95,14 @@ const products: Product[] = [
     rating: 4.8,
     sold: 157,
     category: "Electronics",
+    stock: 22,
+    description:
+      "A compact speaker concept for enjoying audio at home or while traveling.",
+    features: [
+      "Compact portable design",
+      "Suitable for everyday listening",
+      "Modern audio accessory",
+    ],
   },
   {
     id: "6",
@@ -72,115 +114,181 @@ const products: Product[] = [
     rating: 4.4,
     sold: 75,
     category: "Fashion",
+    stock: 15,
+    description:
+      "Contemporary sunglasses that add a polished finishing touch to everyday outfits.",
+    features: [
+      "Contemporary frame styling",
+      "Lightweight fashion accessory",
+      "Suitable for casual outfits",
+    ],
   },
 ];
 
+type DialogState =
+  | { type: "details"; product: Product }
+  | { type: "items"; product: Product }
+  | null;
+
 export default function ProductGrid() {
-  const [cart, setCart] = useState<Product[]>([]);
-  const [wishlist, setWishlist] = useState<string[]>([]);
-  const [quickView, setQuickView] = useState<Product | null>(null);
+  const [dialog, setDialog] = useState<DialogState>(null);
 
-  function toggleWishlist(product: Product) {
-    setWishlist((current) =>
-      current.includes(product.id)
-        ? current.filter((id) => id !== product.id)
-        : [...current, product.id]
-    );
-  }
+  const relatedProducts =
+    dialog?.type === "items"
+      ? products.filter(
+          (product) =>
+            product.category === dialog.product.category &&
+            product.id !== dialog.product.id
+        )
+      : [];
 
-  function addToCart(product: Product) {
-    setCart((current) => [...current, product]);
-  }
+  const selectedProduct =
+    dialog?.type === "details" ? dialog.product : null;
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-5 sm:py-10 lg:px-8">
+    <section className="mx-auto w-full max-w-7xl px-3 py-10 sm:px-5 lg:px-8">
       {/* Section heading */}
-      <div className="mb-5 flex items-end justify-between gap-3">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700 sm:text-xs">
-            MOFHAF COLLECTION
-          </p>
+      <div className="mb-6">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
+          MOFHAF COLLECTION
+        </p>
 
-          <h2 className="mt-1 text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
-            More to love
-          </h2>
+        <h2 className="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+          Discover Our Products
+        </h2>
 
-          <p className="mt-1 text-xs text-gray-500 sm:text-sm">
-            Discover your favorite products.
-          </p>
-        </div>
-
-        <div className="shrink-0 text-right text-xs text-gray-600 sm:text-sm">
-          <p>Cart: {cart.length}</p>
-          <p>Wishlist: {wishlist.length}</p>
-        </div>
+        <p className="mt-2 text-sm text-gray-500">
+          Explore quality products selected for you.
+        </p>
       </div>
 
-      {/* Compact responsive grid */}
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5 xl:grid-cols-5">
+      {/* Product cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-5">
         {products.map((product) => (
           <ProductCard
             key={product.id}
             product={product}
-            onAddToCart={addToCart}
-            onWishlist={toggleWishlist}
-            onQuickView={setQuickView}
+            onQuickView={(item) =>
+              setDialog({ type: "details", product: item })
+            }
+            onSameItems={(item) =>
+              setDialog({ type: "items", product: item })
+            }
           />
         ))}
       </div>
 
-      {/* Quick view dialog */}
-      {quickView && (
+      {/* Professional details dialog */}
+      <ProductDetailsDialog
+        product={selectedProduct}
+        open={dialog?.type === "details"}
+        onOpenChange={(open) => {
+          if (!open) setDialog(null);
+        }}
+        onAddToCart={(product, quantity) => {
+          // Replace with your real cart state or API.
+          console.log("Add to cart:", product.id, quantity);
+        }}
+      />
+
+      {/* Related-items dialog */}
+      {dialog?.type === "items" && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-          onClick={() => setQuickView(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-sm sm:p-5"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setDialog(null);
+            }
+          }}
         >
           <div
             role="dialog"
             aria-modal="true"
-            aria-labelledby="quick-view-title"
-            className="relative w-full max-w-sm rounded-xl bg-white p-5 shadow-2xl"
-            onClick={(event) => event.stopPropagation()}
+            aria-labelledby="related-items-title"
+            className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-7"
           >
             <button
               type="button"
-              aria-label="Close quick view"
-              onClick={() => setQuickView(null)}
-              className="absolute right-3 top-3 rounded-md px-2 py-1 text-xl text-gray-500 hover:bg-gray-100"
+              onClick={() => setDialog(null)}
+              aria-label="Close related items"
+              className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200"
             >
               ×
             </button>
 
-            <div className="relative mb-4 aspect-square overflow-hidden rounded-lg bg-gray-50">
-              <img
-                src={quickView.image}
-                alt={quickView.name}
-                sizes="200"
-                className="size-full object-contain p-4"
-              />
+            <div className="mb-5 pr-8">
+              <div className="flex items-center gap-2 text-emerald-700">
+                <Layers2 className="size-5" />
+                <span className="text-xs font-bold uppercase tracking-widest">
+                  Related Collection
+                </span>
+              </div>
+
+              <h2
+                id="related-items-title"
+                className="mt-2 text-xl font-bold text-gray-900 sm:text-2xl"
+              >
+                More {dialog.product.category} Items
+              </h2>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Products related to {dialog.product.name}.
+              </p>
             </div>
 
-            <h3
-              id="quick-view-title"
-              className="text-lg font-semibold text-gray-900"
-            >
-              {quickView.name}
-            </h3>
+            {relatedProducts.length > 0 ? (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {relatedProducts.map((product) => (
+                  <button
+                    type="button"
+                    key={product.id}
+                    onClick={() =>
+                      setDialog({ type: "details", product })
+                    }
+                    className="group overflow-hidden rounded-xl border border-gray-200 text-left transition hover:border-emerald-500 hover:shadow-md"
+                  >
+                    <div className="relative aspect-square overflow-hidden bg-gray-50">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="size-full object-contain p-3 transition-transform group-hover:scale-105"
+                      />
+                    </div>
 
-            <p className="mt-2 text-xl font-bold text-emerald-700">
-              ৳{quickView.price.toLocaleString("en-US")}
-            </p>
+                    <div className="p-3">
+                      <p className="line-clamp-2 text-sm font-semibold text-gray-800">
+                        {product.name}
+                      </p>
 
-            <button
-              type="button"
-              onClick={() => {
-                addToCart(quickView);
-                setQuickView(null);
-              }}
-              className="mt-4 w-full rounded-lg bg-emerald-700 px-4 py-3 text-sm font-semibold text-white hover:bg-emerald-800"
-            >
-              Add to cart
-            </button>
+                      <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
+                        <Star className="size-3.5 fill-amber-400 text-amber-400" />
+                        {product.rating.toFixed(1)}
+                        <span>· {product.sold} sold</span>
+                      </div>
+
+                      <p className="mt-2 font-bold text-emerald-700">
+                        ৳{product.price.toLocaleString("en-BD")}
+                      </p>
+
+                      <span className="mt-2 flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                        See Details
+                        <ArrowRight className="size-3.5" />
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-xl border border-dashed border-gray-200 px-4 py-10 text-center">
+                <Layers2 className="mx-auto size-8 text-gray-400" />
+                <p className="mt-3 font-semibold text-gray-800">
+                  No other items yet
+                </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  There are no other demo products in this category.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

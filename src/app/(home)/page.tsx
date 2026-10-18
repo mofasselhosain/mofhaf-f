@@ -1,6 +1,9 @@
 import MofhafCategorySection from "@/components/category/home-category";
 import HeroBanner from "@/components/home/topBanner/top-banner";
+
 import ProductGrid from "@/components/products/products-grid";
+
+
 
 
 export default function Home() {
@@ -10,6 +13,9 @@ export default function Home() {
       <HeroBanner/>
       <MofhafCategorySection/>
       <ProductGrid/>
+      
+      {/* <MofProductGrid></MofProductGrid> */}
+      
     </div>
   );
 }
