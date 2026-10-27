@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -27,7 +27,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
-import { SecondHeader } from "./secondHeader";
+// import { SecondHeader } from "./secondHeader";
+import AuthDialog from "@/components/auth/auth-dialog";
+import { useGetMe, useLogout } from "@/hooks";
+import { toast } from "@/components/ui/toast";
+import { UserRole } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 
 const categories = [
   { name: "Electronics", slug: "electronics" },
@@ -89,7 +94,14 @@ type CartItem = {
 
 export default function MofhafHeader() {
   const router = useRouter();
-
+// const {data,isLoading}= useGetMe()
+// console.log(data)
+  const dashboardRoute: Record<UserRole, string> = {
+    SUPER_ADMIN: "/super_admin",
+    ADMIN: "/admin",
+    PROVIDER: "/provider",
+    CUSTOMER: "/dashboard",
+  };
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [locale, setLocale] = useState("en");
@@ -142,11 +154,41 @@ export default function MofhafHeader() {
 
   const linkButtonClass = buttonVariants({
     variant: "outline",
-    className: "relative shrink-0 gap-2 px-3",
+    className: "relative shrink-0 gap-2 px-3 hidden",
   });
+  const { data, isLoading } = useGetMe();
+  const { mutate: logout } = useLogout();
+  const queryClient = useQueryClient();
+
+  const role: UserRole = !!data?.data && data?.data.role;
+ 
+const userData = data?.data
+if (isLoading) {
+  return <div>Loading user...</div>;
+}
+console.log(userData)
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        toast.add({
+          title: "Tata",
+          description: "Logged out successfully",
+          type: "success",
+        });
+        queryClient.removeQueries({ queryKey: ["user"] });
+      },
+      onError: () => {
+        toast.add({
+          title: "Logout failed",
+          description: "Something Went Wrong",
+          type: "error",
+        });
+      },
+    });
+  };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+    <header className="sticky  top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       {/* Main header */}
       <div className="mx-auto flex max-w-screen-2xl items-center gap-3 px-4 py-3 lg:gap-6 lg:px-8">
         {/* Mobile menu */}
@@ -170,18 +212,30 @@ export default function MofhafHeader() {
                 MOFHAF
               </Link>
 
-              <Separator className="my-4" />
+              <Separator className="my-4" />{
+                !userData && (   <p>
+              <Suspense fallback={null}>
+               <AuthDialog />
+               </Suspense>
+               
+              </p>)
+              }
+            
+            <p className="">
+                  {role && <Link className="hover:bg-teal-500 hover:text-white hover:p-2 hover:rounded-full" href={dashboardRoute[role]}>Dashboard</Link>}
+            </p>
 
               <p className="mb-3 text-sm font-semibold">
                 Categories
               </p>
+             
 
               <nav className="flex flex-col gap-1">
                 {categories.map((category) => (
                   <Link
                     key={category.slug}
                     href={`/categories/${category.slug}`}
-                    className="rounded-md px-3 py-2 text-sm hover:bg-accent"
+                    className="rounded-md px-3 py-2 text-sm hover:bg-teal-500 hover:text-white hover:p-2 hover:rounded-full"
                   >
                     {category.name}
                   </Link>
@@ -189,14 +243,21 @@ export default function MofhafHeader() {
               </nav>
 
               <Separator className="my-4" />
+              <p>
+                  { userData && (
+            <Button className="hover:bg-teal-500 hover:text-red-500  text-red-500" onClick={handleLogout} variant="destructive">
+              Logout
+            </Button>
+          )}
+            </p>
 
-              <Link className="block py-2" href="/orders">
+              <Link className="block py-2 hover:bg-teal-500 hover:text-white hover:p-2 hover:rounded-full" href="/orders">
                 My orders
               </Link>
-              <Link className="block py-2" href="/wishlist">
+              <Link className="block py-2 hover:bg-teal-500 hover:text-white hover:p-2 hover:rounded-full" href="/wishlist">
                 Wishlist
               </Link>
-              <Link className="block py-2" href="/help">
+              <Link className="block py-2 hover:bg-teal-500 hover:text-white hover:p-2 hover:rounded-full" href="/help">
                 Help center
               </Link>
             </SheetContent>
@@ -377,13 +438,30 @@ export default function MofhafHeader() {
         </DropdownMenu> */}
 
         {/* Sign in: link styled as a button */}
-        <Link
-          href="/sign-in"
+        <div
+          // href="/sign-in"
           className="hidden shrink-0 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent sm:flex"
         >
-          <UserRound className="h-5 w-5" />
-          <span className="hidden lg:inline">Sign in</span>
-        </Link>
+          {/* <UserRound className="h-5 w-5" /> */}
+          <span className="hidden lg:inline">
+
+            {
+               !userData && (
+                <Suspense fallback={null}>
+  <AuthDialog />
+</Suspense>
+              )
+            }
+             { userData && (
+            <Button onClick={handleLogout} variant="destructive">
+              Logout
+            </Button>
+          )}
+          </span>
+          <span>
+              {role && <Link href={dashboardRoute[role]}>Dashboard</Link>}
+          </span>
+        </div>
 
         {/* Cart: link styled with shadcn button variants */}
         <Link
@@ -423,7 +501,7 @@ export default function MofhafHeader() {
           </Link>
         </nav>
       </div> */}
-      <SecondHeader/>
+      {/* <SecondHeader/> */}
     </header>
   );
 }

@@ -13,7 +13,8 @@ export interface Product {
   features?: string[];
   stock?: number;
 }
- type IProduct = {
+
+ export type IProduct = {
  id: string;
   name: string;
   slug?: string;
