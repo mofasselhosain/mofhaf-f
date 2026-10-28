@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowRight,
   Eye,
@@ -17,7 +17,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { useLogin, useRegistration } from "@/hooks";
+import { useGetMe, useLogin, useRegistration } from "@/hooks";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,8 +33,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import GoogleLoginComponent from "../modules/google-login/google-login";
+import { jwtUtils } from "@/utils/jwt";
 
-type UserRole = "customer" | "provider" | "admin" | "super_admin";
+type UserRole = "CUSTOMER" | "PROVIDER" | "ADMIN" | "SUPER_ADMIN";
 type AuthMode = "login" | "register";
 
 type AuthResponse = {
@@ -45,12 +46,15 @@ type AuthResponse = {
     role?: UserRole;
     name?: string;
     email?: string;
+    
   };
   data?: {
+    accessToken?:string;
     user?: {
       role?: UserRole;
       name?: string;
       email?: string;
+      accessToken?:string;
     };
   };
   url?: string;
@@ -61,10 +65,10 @@ const API_BASE_URL = (
 ).replace(/\/$/, "");
 
 const dashboardRoutes: Record<UserRole, string> = {
-  customer: "/customer",
-  provider: "/provider",
-  admin: "/admin",
-  super_admin: "/admin",
+  CUSTOMER: "/customer",
+  PROVIDER: "/provider",
+  ADMIN: "/admin",
+  SUPER_ADMIN: "/admin",
 };
 
 function GoogleIcon() {
@@ -124,10 +128,29 @@ async function postAuth(
 }
 
 export default function AuthDialog() {
+  // const {data:userData, isLoading} = useGetMe()
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [errorShow, setError]= useState("")
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<AuthMode>("login");
+  const refreshAfterAuth = async (destination: string) => {
+  // Close the dialog and clear sensitive form fields.
+  setOpen(false);
+  resetFields();
+  setError("");
+
+  // Update cached authentication data.
+  await queryClient.invalidateQueries({
+    queryKey: ["auth", "me"],
+  });
+
+  // Navigate to the appropriate page.
+  router.replace(destination);
+
+  // Refresh Next.js Server Components and server-side data.
+  router.refresh();
+};
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -220,33 +243,30 @@ export default function AuthDialog() {
         password,
       },
       {
-        onSuccess: (res) => {
-          const result = res as unknown as AuthResponse;
+        onSuccess: async (res) => {
+        const result = res as unknown as AuthResponse;
+console.log(result)
+        if (result.success === false) {
+          toast.error(result.message || "Login failed.");
+          return;
+        }
+        console.log(result.data)
+console.log(result.data?.accessToken as string, process.env.NEXT_PUBLIC_JWT_ACCESS_SECRET as string)
+     const  userData = jwtUtils.verifyToken(result.data?.accessToken as string, process.env.NEXT_PUBLIC_JWT_ACCESS_SECRET as string)
+     console.log(userData)
+     
+        const verifiedRole =
+          userData.data?.role  ?? userData.data?.role;
+console.log(verifiedRole)
+        const destination =
+          verifiedRole && dashboardRoutes[verifiedRole]
+            ? dashboardRoutes[verifiedRole]
+            : "/";
 
-          toast.success(
-            result.message || "Login successful.",
-          );
+        toast.success(result.message || "Login successful.");
 
-          setOpen(false);
-          resetFields();
-
-          // Use the role returned by the authenticated backend.
-          const verifiedRole =
-            result.user?.role ?? result.data?.user?.role;
-
-          if (
-            verifiedRole &&
-            Object.prototype.hasOwnProperty.call(
-              dashboardRoutes,
-              verifiedRole,
-            )
-          ) {
-            router.push(dashboardRoutes[verifiedRole]);
-          } else {
-            router.push("/");
-          }
-        },
-
+        await refreshAfterAuth(destination);
+      },
         onError: (error: Error) => {
             setError("Please valid Email or Password ...")
           toast.error(
