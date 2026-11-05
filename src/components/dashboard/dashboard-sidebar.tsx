@@ -32,7 +32,7 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
 
   console.log(pathname);
   return (
-    <Sidebar>ক
+    <Sidebar>
       <SidebarHeader>
         <Link href="/">
        <div className="flex items-center gap-3">
