@@ -6,7 +6,7 @@ export const adminRoutes = [
     items: [
       {
         title: "Analytics",
-        url: `${prefix}analytics`,
+        url: `${prefix}/analytics`,
       },
       {
         title: "All Orders",
