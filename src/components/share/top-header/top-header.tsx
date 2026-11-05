@@ -163,13 +163,13 @@ export default function MofhafHeader() {
   const role: UserRole = !!data?.data && data?.data.role;
  
 const userData = data?.data
-if (isLoading) {
+if (isLoading && userData && role) {
   return <div>Loading user...</div>;
 }
 console.log(userData)
   const handleLogout = () => {
     logout(undefined, {
-      onSuccess: () => {
+      onSuccess: () => { 
         toast.add({
           title: "Tata",
           description: "Logged out successfully",
@@ -244,7 +244,7 @@ console.log(userData)
 
               <Separator className="my-4" />
               <p>
-                  { userData && (
+                  { userData && role && (
             <Button className="hover:bg-teal-500 hover:text-red-500  text-red-500" onClick={handleLogout} variant="destructive">
               Logout
             </Button>
