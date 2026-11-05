@@ -178,7 +178,7 @@ console.log(userData)
         queryClient.removeQueries({ queryKey: ["user"] });
       },
       onError: () => {
-        toast.add({
+        toast.add({     
           title: "Logout failed",
           description: "Something Went Wrong",
           type: "error",
@@ -207,7 +207,7 @@ console.log(userData)
             >
               <Link
                 href="/"
-                className="text-2xl font-black tracking-tight"
+                className="font-black tracking-tight"
               >
                 MOFHAF
               </Link>
@@ -265,8 +265,8 @@ console.log(userData)
         </div>
 
         {/* Brand */}
-        <Link href="/" className="shrink-0">
-          <span className="text-2xl font-black tracking-tighter sm:text-3xl">
+        <Link href="/" className="">
+          <span className=" font-black tracking-tighter ">
             MOF<span className="text-primary">HAF</span>
           </span>
 

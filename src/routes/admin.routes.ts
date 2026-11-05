@@ -2,20 +2,64 @@ const prefix = "/admin";
 
 export const adminRoutes = [
   {
-    title: "Management",
+    title: "Admin Management",
     items: [
       {
-        title: "Overview",
-        url: `${prefix}`,
+        title: "Analytics",
+        url: `${prefix}analytics`,
       },
       {
-        title: "Doctor Approval",
-        url: `${prefix}/approve-doctor`,
+        title: "All Orders",
+        url: `${prefix}/orders`,
+      },
+      {
+        title: "Products",
+        url: `${prefix}/products`,
+      },
+      {
+        title: "Category",
+        url: `${prefix}/categories`,
+      },
+      {
+        title: "Brands",
+        url: `${prefix}/brands`,
+      },
+      {
+        title: "Inventory",
+        url: `${prefix}/inventory`,
+      },
+      {
+        title: "Customer",
+        url: `${prefix}/customer`,
+      },
+      {
+        title: "Payments",
+        url: `${prefix}/payments`,
+      },
+      {
+        title: "Coupons",
+        url: `${prefix}/coupons-discount`,
+      },
+      {
+        title: "Promotions",
+        url: `${prefix}/promotions`,
+      },
+      {
+        title: "Reviews",
+        url: `${prefix}/reviews`,
+      },
+      {
+        title: "Support",
+        url: `${prefix}/support`,
+      },
+      {
+        title: "Staff Management",
+        url: `${prefix}/staff-management`,
       },
     ],
   },
   {
-    title: "App Settings",
+    title: "Settings",
     items: [
       {
         title: "Routing",

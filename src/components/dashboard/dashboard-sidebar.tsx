@@ -31,27 +31,26 @@ export function DashboardSidebar({ role }: { role: UserRole }) {
   const routes: SidebarItems = sidebarRoutes[role] || [];
 
   console.log(pathname);
-
   return (
-    <Sidebar>
+    <Sidebar>ক
       <SidebarHeader>
         <Link href="/">
-          <div className="flex items-center gap-2">
+       <div className="flex items-center gap-3">
             {/* <Logo /> */}
-            <span>MOFHAF Management</span>
+            <span className="font-bold lg:text-xl">MOF<span className="text-teal-400">HAF</span> Mana<span className="text-teal-400">gement</span></span>
           </div>
         </Link>
       </SidebarHeader>
       <SidebarContent>
         {routes.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+          <SidebarGroup  key={item.title}>
+            <SidebarGroupLabel className="font-bold ">{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem  key={item.title}>
                     <SidebarMenuButton
-                      render={<Link href={item.url} />}
+                      render={<Link className="hover:bg-teal-400 hover:text-white hover:font-bold" href={item.url} />}
                       isActive={pathname === item.url}
                     >
                       {item.title}

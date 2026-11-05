@@ -2,29 +2,52 @@ const prefix = "/provider";
 
 export const providerRoutes = [
   {
-    title: "Bookings",
+    title: "Sales Dashboard",
     items: [
       {
-        title: "Overview",
-        url: `${prefix}`,
+        title: "Orders",
+        url: `${prefix}/orders`,
       },
       {
-        title: "My Appointments",
-        url: `${prefix}/my-appointments`,
+        title: "Products",
+        url: `${prefix}/products`,
+      },
+      {
+        title: "Inventory",
+        url: `${prefix}/inventory`,
+      },
+      {
+        title: "Payments",
+        url: `${prefix}/payments`,
+      },
+      {
+        title: "Coupons & Discounts",
+        url: `${prefix}/coupons-discounts`,
+      },
+      {
+        title: "Products",
+        url: `${prefix}/reviews-ratings`,
       },
     ],
   },
   {
-    title: "App Settings",
+    title: "BUSINESS MANAGEMENT",
     items: [
-      {
-        title: "Routing",
-        url: "#",
+        {
+        title: "Shipping & Delivery",
+        url: `${prefix}/shipping-delivery`,
       },
-      {
-        title: "Data Fetching",
-        url: "#",
-        isActive: true,
+        {
+        title: "Reports & Exports",
+        url: `${prefix}/reports-exports`,
+      },
+        {
+        title: "Notification",
+        url: `${prefix}/notifications`,
+      },
+        {
+        title: "Store Settings",
+        url: `${prefix}/store-settings`,
       },
     ],
   },
