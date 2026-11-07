@@ -939,7 +939,7 @@ const defaultCredentials: Record<
   },
 
   CUSTOMER: {
-    email: "mofassel6146@gmail.com",
+    email: "mofassel100@gmail.com",
     password: "Mofassel317@",
   },
 };
@@ -976,7 +976,7 @@ const roles = [
 // ========================================
 
 const dashboardRoutes: Record<UserRole, string> = {
-  CUSTOMER: "/customer",
+  CUSTOMER: "/dashboard",
   PROVIDER: "/provider",
   ADMIN: "/admin",
   SUPER_ADMIN: "/admin",
