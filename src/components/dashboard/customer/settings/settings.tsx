@@ -491,7 +491,11 @@ export default function CustomerSettingsPage() {
                     This browser · Active session
                   </p>
                 </div>
-                <Badge variant="secondary">Current</Badge>
+                <Badge
+                
+                // variant="secondary"
+                
+                >Current</Badge>
               </CardContent>
             </Card>
           </div>

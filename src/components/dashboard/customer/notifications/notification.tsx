@@ -456,7 +456,7 @@ export default function CustomerNotificationsPage() {
               </Button>
 
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+                <DropdownMenuTrigger >
                   <Button
                     size="sm"
                     variant="outline"
@@ -643,7 +643,7 @@ export default function CustomerNotificationsPage() {
                     </Button>
 
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger >
                         <Button
                           variant="ghost"
                           size="icon"

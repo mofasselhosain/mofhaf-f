@@ -312,7 +312,7 @@ export default function ReturnsRefundsPage() {
         </div>
 
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
+          <DialogTrigger >
             <Button className="gap-2">
               <Plus className="h-4 w-4" />
               Request Return
@@ -519,7 +519,7 @@ export default function ReturnsRefundsPage() {
             </div>
           </div>
 
-          <Button variant="outline" asChild>
+          <Button variant="outline" >
             <Link href="/return-policy">
               View Policy <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -605,7 +605,7 @@ export default function ReturnsRefundsPage() {
               />
             </div>
 
-            <Select value={filter} onValueChange={(value)=> setFilter(value ?? "ALL")}>
+            <Select value={filter} onValueChange={(value)=> setFilter(value ?? "ALL  ")}>
               <SelectTrigger className="w-full sm:w-[190px]">
                 <SelectValue placeholder="Filter status" />
               </SelectTrigger>
@@ -777,7 +777,7 @@ export default function ReturnsRefundsPage() {
                 >
                   Close
                 </Button>
-                <Button asChild>
+                <Button >
                   <Link href="/dashboard/support">
                     Contact Support
                   </Link>

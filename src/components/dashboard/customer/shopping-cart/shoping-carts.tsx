@@ -150,7 +150,7 @@ export default function ShoppingCartPage() {
           Explore our products and find something you love.
         </p>
 
-        <Button asChild className="mt-6 gap-2">
+        <Button  className="mt-6 gap-2">
           <Link href="/products">
             Continue Shopping
             <ArrowRight className="h-4 w-4" />
@@ -317,7 +317,7 @@ export default function ShoppingCartPage() {
                 </div>
               ))}
 
-              <Button variant="outline" asChild className="gap-2">
+              <Button variant="outline"  className="gap-2">
                 <Link href="/products">
                   Continue Shopping
                   <ArrowRight className="h-4 w-4" />

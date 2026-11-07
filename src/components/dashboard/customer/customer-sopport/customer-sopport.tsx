@@ -260,7 +260,7 @@ export default function CustomerSupportPage() {
         </div>
 
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
+          <DialogTrigger >
             <Button className="gap-2">
               <Plus className="size-4" />
               Create Support Ticket
