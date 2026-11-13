@@ -678,7 +678,7 @@ export function ProductQuickView({
                     sm:h-12 sm:text-sm
                   "
                   disabled={stock <= 0}
-                  onClick={handleAddToCart}
+                    onClick={() => onAddToCart?.(product, quantity)}
                 >
                   <ShoppingCart className="size-4 shrink-0" />
                   Add to Cart

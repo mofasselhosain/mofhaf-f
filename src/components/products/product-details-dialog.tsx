@@ -77,6 +77,7 @@ export function ProductDetailsDialog({
        const { addToCart } = useCart();
 
   const handleAddToCart = (product:Product) => {
+    
     if ((product.stock ?? 0) <= 0) {
       toast.error("Product is out of stock");
       return;

@@ -24,65 +24,211 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useCart } from "@/context/cart-context";
+import { toast } from "sonner";
+import { Product } from "@/types/product";
 
-type Product = {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  oldPrice?: number;
-  rating: number;
-  image: string;
-  badge?: string;
-  color: string;
-};
 
+// type Product = {
+//   id?: number;
+//   name?: string;
+//   category?: string;
+//   price?: number;
+//   oldPrice?: number;
+//   rating?: number;
+//   image?: string;
+//   badge?: string;
+//   color?: string;
+//   stock?:number
+//   originalPrice?: number
+//    sold?: number;
+//    description?: string;
+//   features?: string[];
+// };
+  
 const products: Product[] = [
-  {
-    id: 1,
-    name: "Studio Wireless Headphones",
-    category: "Electronics",
-    price: 89,
-    oldPrice: 129,
-    rating: 4.9,
-    badge: "BESTSELLER",
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=85",
-    color: "bg-orange-50",
+ {
+    "id": "107",
+    "name": "Women's Casual Kurti",
+    "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600",
+    "price": 990,
+    "originalPrice": 1490,
+    "rating": 4.6,
+    "sold": 640,
+    "category": "Women's Fashion",
+    "stock": 24,
+    "description": "A versatile casual kurti for comfortable everyday styling.",
+    "features": ["Soft Fabric", "Comfort Fit", "Everyday Wear"]
   },
   {
-    id: 2,
-    name: "Minimal Everyday Watch",
-    category: "Accessories",
-    price: 119,
-    oldPrice: 149,
-    rating: 4.8,
-    badge: "POPULAR",
-    image:
-      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=85",
-    color: "bg-stone-100",
+    "id": "108",
+    "name": "Kids Soft Plush Toy",
+    "image": "https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=600",
+    "price": 490,
+    "originalPrice": 750,
+    "rating": 4.7,
+    "sold": 380,
+    "category": "Kids & Baby",
+    "stock": 21,
+    "description": "A soft plush toy for children's playtime and gifting.",
+    "features": ["Soft Fabric", "Cute Design", "Easy to Carry"]
   },
   {
-    id: 3,
-    name: "Essential Everyday Sneakers",
-    category: "Fashion",
-    price: 75,
-    rating: 4.7,
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=85",
-    color: "bg-red-50",
+    "id": "109",
+    "name": "Home Workout Step Platform",
+    "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600",
+    "price": 1290,
+    "originalPrice": 1790,
+    "rating": 4.5,
+    "sold": 160,
+    "category": "Sports & Fitness",
+    "stock": 10,
+    "description": "A step platform for cardio workouts and home fitness routines.",
+    "features": ["Stable Surface", "Compact Design", "Home Workout"]
   },
   {
-    id: 4,
-    name: "Premium Travel Backpack",
-    category: "Accessories",
-    price: 95,
-    oldPrice: 115,
-    rating: 4.9,
-    image:
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=85",
-    color: "bg-emerald-50",
+    "id": "110",
+    "name": "Classic Analog Watch",
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600",
+    "price": 1690,
+    "originalPrice": 2390,
+    "rating": 4.6,
+    "sold": 480,
+    "category": "Watches & Jewelry",
+    "stock": 15,
+    "description": "A versatile analog watch for everyday and office wear.",
+    "features": ["Analog Dial", "Quartz Movement", "Classic Style"]
   },
+  {
+    "id": "111",
+    "name": "Car Trunk Storage Organizer",
+    "image": "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600",
+    "price": 990,
+    "originalPrice": 1390,
+    "rating": 4.5,
+    "sold": 210,
+    "category": "Automotive",
+    "stock": 16,
+    "description": "A foldable organizer for keeping groceries and car accessories tidy.",
+    "features": ["Foldable Design", "Storage Compartments", "Portable"]
+  },
+  {
+    "id": "112",
+    "name": "Premium Writing Pen",
+    "image": "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=600",
+    "price": 350,
+    "originalPrice": 550,
+    "rating": 4.6,
+    "sold": 290,
+    "category": "Books & Stationery",
+    "stock": 30,
+    "description": "A premium writing pen for journaling, office, and everyday notes.",
+    "features": ["Smooth Ink Flow", "Comfort Grip", "Elegant Design"]
+  },
+  {
+    "id": "113",
+    "name": "Smart Wireless Keyboard and Mouse",
+    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600",
+    "price": 1490,
+    "originalPrice": 2190,
+    "rating": 4.6,
+    "sold": 390,
+    "category": "Electronics",
+    "stock": 14,
+    "description": "A wireless keyboard and mouse combo for home and office computers.",
+    "features": ["Wireless Connection", "Quiet Keys", "Ergonomic Mouse"]
+  },
+  {
+    "id": "114",
+    "name": "Compact Evening Clutch Bag",
+    "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600",
+    "price": 1190,
+    "originalPrice": 1690,
+    "rating": 4.7,
+    "sold": 310,
+    "category": "Bags & Accessories",
+    "stock": 12,
+    "description": "A compact clutch bag for parties, celebrations, and evening occasions.",
+    "features": ["Compact Design", "Secure Closure", "Elegant Finish"]
+  },
+  {
+    "id": "115",
+    "name": "Men's Casual Slip-On Shoes",
+    "image": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600",
+    "price": 1390,
+    "originalPrice": 1990,
+    "rating": 4.5,
+    "sold": 440,
+    "category": "Shoes & Footwear",
+    "stock": 19,
+    "description": "Easy-to-wear casual shoes for daily errands and relaxed outfits.",
+    "features": ["Slip-On Design", "Flexible Sole", "Comfort Fit"]
+  },
+  {
+    "id": "116",
+    "name": "Women's Elegant Evening Dress",
+    "image": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600",
+    "price": 2490,
+    "originalPrice": 3290,
+    "rating": 4.8,
+    "sold": 270,
+    "category": "Women's Fashion",
+    "stock": 8,
+    "description": "An elegant dress for parties, celebrations, and special occasions.",
+    "features": ["Elegant Silhouette", "Soft Fabric", "Occasion Wear"]
+  },
+  {
+    "id": "117",
+    "name": "Kids School Lunch Box",
+    "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600",
+    "price": 490,
+    "originalPrice": 750,
+    "rating": 4.5,
+    "sold": 520,
+    "category": "Kids & Baby",
+    "stock": 33,
+    "description": "A practical lunch container for school meals and snacks.",
+    "features": ["Reusable", "Easy to Clean", "Portable Size"]
+  },
+  {
+    "id": "118",
+    "name": "Home Fitness Foam Roller",
+    "image": "https://images.unsplash.com/photo-1599058917212-d750089bc07b?w=600",
+    "price": 790,
+    "originalPrice": 1190,
+    "rating": 4.6,
+    "sold": 240,
+    "category": "Sports & Fitness",
+    "stock": 15,
+    "description": "A foam roller for warm-ups, stretching, and post-workout recovery routines.",
+    "features": ["Textured Surface", "Lightweight", "Easy Storage"]
+  },
+  {
+    "id": "119",
+    "name": "Elegant Women's Stud Earrings",
+    "image": "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600",
+    "price": 490,
+    "originalPrice": 750,
+    "rating": 4.7,
+    "sold": 610,
+    "category": "Watches & Jewelry",
+    "stock": 20,
+    "description": "Simple stud earrings for everyday wear and special occasions.",
+    "features": ["Lightweight", "Classic Style", "Gift Ready"]
+  },
+  {
+    "id": "120",
+    "name": "Car Tire Inflator",
+    "image": "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600",
+    "price": 1890,
+    "originalPrice": 2490,
+    "rating": 4.6,
+    "sold": 180,
+    "category": "Automotive",
+    "stock": 7,
+    "description": "A portable tire inflator for convenient vehicle tire maintenance.",
+    "features": ["Portable Design", "Pressure Display", "Compact Storage"]
+  }
 ];
 
 const categories = ["All", "Electronics", "Fashion", "Accessories"];
@@ -108,6 +254,18 @@ type ChatMessage = {
 };
 
 export default function AICommerceSection() {
+         const { addToCart } = useCart();
+
+  const handleAddToCart = (product:Product) => {
+    if ((product.stock ?? 0) <= 0) {
+      
+    toast.error("Product is out of stock");
+      return;
+    }
+    addToCart(product,1);
+    toast.success("Product added to cart!");
+    
+  };
   const [category, setCategory] = useState("All");
   const [query, setQuery] = useState("");
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -458,7 +616,14 @@ export default function AICommerceSection() {
               transition={{ duration: 0.35, delay: index * 0.06 }}
             >
               <Card className="group overflow-hidden rounded-[1.5rem] border-neutral-200/80 bg-white py-0 shadow-none transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/[0.05]">
-                <div className={`relative aspect-[4/4.3] overflow-hidden ${product.color}`}>
+                <div className={`relative aspect-[4/4.3] overflow-hidden
+                
+                // 
+                `
+                
+                }
+                
+                >
                   <img
                     src={product.image}
                     alt={product.name}
@@ -466,25 +631,25 @@ export default function AICommerceSection() {
                     className="size-full object-cover transition duration-700 group-hover:scale-105"
                   />
 
-                  {product.badge && (
+                  {/* {product.badge && (
                     <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold tracking-wider">
                       {product.badge}
                     </span>
-                  )}
+                  )} */}
 
                   <button
-                    onClick={() => toggleFavorite(product.id)}
-                    aria-label={
-                      favorites.includes(product.id)
-                        ? "Remove from favorites"
-                        : "Add to favorites"
-                    }
+                    // onClick={() => toggleFavorite(product.id)}
+                    // aria-label={
+                    //   favorites.includes(product.id)
+                    //     ? "Remove from favorites"
+                    //     : "Add to favorites"
+                    // }
                     className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-white/95 transition hover:scale-110"
                   >
                     <Heart
                       size={17}
                       className={
-                        favorites.includes(product.id)
+                        favorites.includes(product.price)
                           ? "fill-rose-500 text-rose-500"
                           : "text-neutral-700"
                       }
@@ -492,9 +657,7 @@ export default function AICommerceSection() {
                   </button>
 
                   <button
-                    onClick={() => {
-                      setCart((current) => [...current, product.id]);
-                    }}
+                    onClick={() => handleAddToCart(product)}
                     className="absolute inset-x-3 bottom-3 flex translate-y-2 items-center justify-center gap-2 rounded-full bg-black px-4 py-3 text-sm font-semibold text-white opacity-0 transition duration-300 hover:bg-emerald-700 group-hover:translate-y-0 group-hover:opacity-100 focus:translate-y-0 focus:opacity-100"
                   >
                     <ShoppingBag size={15} />
@@ -525,9 +688,9 @@ export default function AICommerceSection() {
                     <span className="text-lg font-bold">
                       ${product.price.toFixed(2)}
                     </span>
-                    {product.oldPrice && (
+                    {product.originalPrice && (
                       <span className="text-sm text-neutral-400 line-through">
-                        ${product.oldPrice.toFixed(2)}
+                        ${product.originalPrice.toFixed(2)}
                       </span>
                     )}
                   </div>

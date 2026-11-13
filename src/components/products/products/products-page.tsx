@@ -32,6 +32,8 @@ import {
 import { ProductCard } from "./product-card-pro";
 import { ProductSort, type SortOption } from "./product-sort";
 import { ProductQuickView } from "./productQuickView";
+import { toast } from "sonner";
+import { useCart } from "@/context/cart-context";
 
 const categories = [
   "Electronics",
@@ -66,14 +68,25 @@ export default function ProductPage() {
     setSelectedProduct(product);
     setQuickViewOpen(true);
   };
-
+const { addToCart } = useCart();
   const handleAddToCart = (
     product: Product,
     quantity: number
   ) => {
-    console.log("Added to cart:", product, quantity);
-    // Connect your cart API or cart context here.
+    if ((product.stock ?? 0) <= 0) {
+      toast.error("Product is out of stock");
+      return;
+    }
+    addToCart(product, quantity);
+    toast.success("Product added to cart!");
+     
   };
+
+         
+
+  // const handleAddToCart = (product:Product) => {
+   
+  // };
 
   const toggleCategory = (category: string) => {
     setSelectedCategories((prev) =>
