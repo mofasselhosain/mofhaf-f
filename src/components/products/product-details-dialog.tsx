@@ -25,6 +25,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useCart } from "@/context/cart-context";
+import { toast } from "sonner";
 
 interface ProductDetailsDialogProps {
   product: Product | null;
@@ -40,6 +42,7 @@ export function ProductDetailsDialog({
   onAddToCart,
 }: ProductDetailsDialogProps) {
   const [quantity, setQuantity] = useState(1);
+  
 
   useEffect(() => {
     if (open) {
@@ -71,13 +74,24 @@ export function ProductDetailsDialog({
         "Practical and modern design",
         "Part of the MOFHAF collection",
       ];
+       const { addToCart } = useCart();
 
-  function handleAddToCart() {
-    if (stock <= 0) return;
+  const handleAddToCart = (product:Product) => {
+    if ((product.stock ?? 0) <= 0) {
+      toast.error("Product is out of stock");
+      return;
+    }
+    addToCart(product, quantity);
+    toast.success("Product added to cart!");
+     onOpenChange(false);
+  };
 
-    onAddToCart?.(product as any, quantity);
-    onOpenChange(false);
-  }
+  // function handleAddToCart() {
+  //   if (stock <= 0) return;
+
+  //   onAddToCart?.(product as any, );
+   
+  // }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -322,7 +336,7 @@ export function ProductDetailsDialog({
               <Button
                 type="button"
                 disabled={stock <= 0}
-                onClick={handleAddToCart}
+               onClick={() => onAddToCart?.(product, quantity)}
                 className="h-11 w-full bg-emerald-700 text-sm font-semibold hover:bg-emerald-800"
               >
                 <ShoppingBag className="mr-2 size-4 shrink-0" />
@@ -333,7 +347,7 @@ export function ProductDetailsDialog({
                 type="button"
                 variant="outline"
                 disabled={stock <= 0}
-                onClick={handleAddToCart}
+                onClick={() => onAddToCart?.(product, quantity)}
                 className="h-11 w-full border-emerald-700 text-sm font-semibold text-emerald-800 hover:bg-emerald-50"
               >
                 Buy Now

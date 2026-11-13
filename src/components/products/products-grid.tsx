@@ -4,8 +4,10 @@
 import { useState } from "react";
 import { ProductCard } from "./producst-card";
 import { ProductDetailsDialog } from "./product-details-dialog";
-import type { Product } from "@/types/product";
+import type { IProduct, Product } from "@/types/product";
 import { Layers2, ArrowRight, Star } from "lucide-react";
+import { useCart } from "@/context/cart-context";
+import { toast } from "sonner";
 
 const products: Product[] = [
   {
@@ -131,6 +133,17 @@ type DialogState =
   | null;
 
 export default function ProductGrid() {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (product:Product,quantity:number) => {
+    if ((product.stock ?? 0) <= 0) {
+      toast.error("Product is out of stock");
+      return;
+    }
+
+    addToCart(product, quantity);
+    toast.success("Product added to cart!");
+  };
   const [dialog, setDialog] = useState<DialogState>(null);
 
   const relatedProducts =
@@ -186,6 +199,7 @@ export default function ProductGrid() {
           if (!open) setDialog(null);
         }}
         onAddToCart={(product, quantity) => {
+          handleAddToCart(product,quantity)
           // Replace with your real cart state or API.
           console.log("Add to cart:", product.id, quantity);
         }}

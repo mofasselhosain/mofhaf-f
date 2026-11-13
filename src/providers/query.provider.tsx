@@ -1,5 +1,6 @@
 "use client";
 
+import { CartProvider } from "@/context/cart-context";
 import {
   environmentManager,
   QueryClient,
@@ -35,6 +36,6 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}><CartProvider>{children}</CartProvider></QueryClientProvider>
   );
 }

@@ -29,3 +29,20 @@ export interface Product {
    
   
 };
+
+export interface ProductFilters {
+  search: string;
+  categories: string[];
+  minPrice: number;
+  maxPrice: number;
+  minRating: number;
+  availability: "all" | "in-stock" | "out-of-stock";
+  minDiscount: number;
+  sortBy:
+    | "featured"
+    | "price-low"
+    | "price-high"
+    | "rating"
+    | "newest"
+    | "best-selling";
+}

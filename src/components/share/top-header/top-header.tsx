@@ -33,6 +33,7 @@ import { useGetMe, useLogout } from "@/hooks";
 import { toast } from "@/components/ui/toast";
 import { UserRole } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCart } from "@/context/cart-context";
 
 const categories = [
   { name: "Electronics", slug: "electronics" },
@@ -93,6 +94,7 @@ type CartItem = {
 };
 
 export default function MofhafHeader() {
+   const { cartCount:cartCountLS, isHydrated } = useCart();
   const router = useRouter();
 // const {data,isLoading}= useGetMe()
 // console.log(data)
@@ -212,9 +214,22 @@ console.log(userData)
                 MOFHAF
               </Link>
 
+<Link
+      href="/cart"
+      className="relative inline-flex items-center justify-center rounded-full p-2 hover:bg-muted"
+    >
+      <ShoppingCart className="h-6 w-6" />
+
+      {isHydrated && cartCountLS > 0 && (
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-xs font-bold text-primary-foreground">
+          {cartCountLS}
+        </span>
+      )}
+    </Link>
               <Separator className="my-4" />{
                 !userData && (   <p>
               <Suspense fallback={null}>
+
                <AuthDialog />
                </Suspense>
                
@@ -464,20 +479,18 @@ console.log(userData)
         </div>
 
         {/* Cart: link styled with shadcn button variants */}
-        <Link
-          href="/cart"
-          aria-label={`Shopping cart, ${cartCount} items`}
-          className={linkButtonClass}
-        >
-          <ShoppingCart className="h-5 w-5" />
-          <span className="hidden lg:inline">Cart</span>
+      <Link
+      href="/cart"
+      className="relative inline-flex items-center justify-center rounded-full p-2 hover:bg-muted"
+    >
+      <ShoppingCart className="h-6 w-6" />
 
-          {cartCount > 0 && (
-            <Badge className="absolute -right-2 -top-2 min-w-5 justify-center px-1">
-              {cartCount}
-            </Badge>
-          )}
-        </Link>
+      {isHydrated && cartCountLS > 0 && (
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-xs font-bold text-primary-foreground">
+          {cartCountLS}
+        </span>
+      )}
+    </Link>
       </div>
 
       {/* Desktop category shortcuts */}
